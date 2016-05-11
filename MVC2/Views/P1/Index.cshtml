@@ -1,0 +1,16 @@
+﻿@model  MVC2.Models.ViewModels.MyViewModel
+
+    <h2>@Html.Encode(Model.Message) </h2>
+
+    oox您好您的等級為 @Model.UserLevel
+    @if(Model.IsMaster)
+      {
+        @:您可以砍站ViewDataDictionary
+       }
+     else
+        {
+        @:你不夠格啦
+      }
+     
+
+
