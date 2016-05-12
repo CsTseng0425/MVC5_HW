@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC2.Models.ViewModels.Product>
+﻿@model IEnumerable<MVC2.Models.ViewModels.VWProduct>
 
 @{
     ViewBag.Title = "ProductList";
@@ -13,16 +13,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.kind)
+            @Html.DisplayNameFor(model => model.PID)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.orderDate)
+            @Html.DisplayNameFor(model => model.PNAME)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.price)
+            @Html.DisplayNameFor(model => model.PRICE)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.memo)
+            @Html.DisplayNameFor(model => model.MEMO)
         </th>
         <th></th>
     </tr>
@@ -30,16 +30,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.kind)
+            @Html.DisplayFor(modelItem => item.PID)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.orderDate)
+            @Html.DisplayFor(modelItem => item.PNAME)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.price)
+            @Html.DisplayFor(modelItem => item.PRICE)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.memo)
+            @Html.DisplayFor(modelItem => item.MEMO)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

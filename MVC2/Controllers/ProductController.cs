@@ -4,11 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MVC2.Models.ViewModels;
+using MVC2.Models;
 
-namespace MVC2.fonts
+namespace MVC2.Controllers
 {
     public class ProductController : Controller
     {
+        private FabricsEntities db = new FabricsEntities();
 
         public ActionResult ProductCreate()
         {
@@ -18,55 +20,68 @@ namespace MVC2.fonts
         // GET: Product
         public ActionResult ProductList()
         {
-            Product[] product = new Product[2];
+            VWProduct[] product = new VWProduct[5];
+            int i = 0;
 
-            product[0] = new Product()
+            foreach (var p in db.Product.Take(5))
             {
-                kind = "A",
-                orderDate = "105/05/06",
-                price = 100,
-                memo = "No stock"
-            };
+                string strMemo;
+                if (p.Active == true)
+                    strMemo = "Avaible";
+                else
+                    strMemo = "No Avaible";
 
-            product[1] = new Product()
-            {
-                kind = "B",
-                orderDate = "105/05/08",
-                price = 200,
-                memo = "Good"
-            };
+                product[i] = new VWProduct()
+                {
+                    PID = p.ProductId,
+                    PNAME = p.ProductName,
+                    PRICE = (decimal)p.Price,
+                    MEMO = strMemo
 
-           
+                };
+
+
+                i++;
+            }
+
             return View(product);
         }
 
         [HttpPost]
-        public ActionResult ProductList(Product newProduct)
+        public ActionResult ProductList(VWProduct newProduct)
         {
-            Product[] product = new Product[3];
+            VWProduct[] product = new VWProduct[6];
+            int i = 0;
 
-            product[0] = new Product()
+            foreach (var p in db.Product.Take(5))
             {
-                kind = "A",
-                orderDate = "105/05/06",
-                price = 100,
-                memo = "No stock"
-            };
+                string strMemo;
+                if (p.Active == true)
+                    strMemo = "Avaible";
+                else
+                    strMemo = "No Avaible";
 
-            product[1] = new Product()
-            {
-                kind = "B",
-                orderDate = "105/05/08",
-                price = 200,
-                memo = "Good"
-            };
-
-              product[2] = new Product()
+                product[i] = new VWProduct()
                 {
-                    kind = newProduct.kind,
-                    orderDate = newProduct.orderDate,
-                    price = newProduct.price,
-                    memo = newProduct.memo
+                    PID = p.ProductId ,
+                    PNAME = p.ProductName,
+                    PRICE = (decimal) p.Price,
+                    MEMO = strMemo
+
+                };
+               
+                
+                i++;
+            }
+
+
+
+            product[i] = new VWProduct()
+                {
+                  PID = newProduct.PID,
+                  PNAME = newProduct.PNAME,
+                  PRICE = newProduct.PRICE,
+                  MEMO = newProduct.MEMO
               };
 
            
