@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVC2.Models;
+using MVC2.Repositories;
+using MVC2.Service;
 
 namespace MVC2.Controllers
 {
@@ -14,20 +16,28 @@ namespace MVC2.Controllers
     {
         private FabricsEntities db = new FabricsEntities();
 
-        // GET: Products
+        private readonly ProductService _productSvc;
+
+        public ProductsController()
+        {
+            var unitOfWork = new EFUnitOfWork();
+            _productSvc = new ProductService(unitOfWork);
+
+        }
+        // GET: Orders
         public ActionResult Index()
         {
-            return View(db.Product.ToList());
+            return View(_productSvc.Lookup());
         }
 
-        // GET: Products/Details/5
+        // GET: Orders/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Product.Find(id);
+            Product product = _productSvc.GetSingle(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -35,13 +45,13 @@ namespace MVC2.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
+        // GET: Orders/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
+        // POST: Orders/Create
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
@@ -50,22 +60,24 @@ namespace MVC2.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Product.Add(product);
-                db.SaveChanges();
+                product.ProductId = _productSvc.GetMaxID() + 1;
+                _productSvc.Add(product);
+                _productSvc.Save();
+                //  UnitOfWork.Save(); => 拉出出執行,比較明確
                 return RedirectToAction("Index");
             }
 
             return View(product);
         }
 
-        // GET: Products/Edit/5
+        // GET: Orders/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Product.Find(id);
+            Product product = _productSvc.GetSingle(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -73,30 +85,31 @@ namespace MVC2.Controllers
             return View(product);
         }
 
-        // POST: Products/Edit/5
+        // POST: Orders/Edit/5
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ProductId,ProductName,Price,Active,Stock")] Product product)
         {
-            if (ModelState.IsValid)
+            var oldData = _productSvc.GetSingle(product.ProductId);
+            if (oldData != null && ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
+                _productSvc.Edit(product, oldData);
+                _productSvc.Save();
                 return RedirectToAction("Index");
             }
             return View(product);
         }
 
-        // GET: Products/Delete/5
+        // GET: Orders/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Product.Find(id);
+            Product product = _productSvc.GetSingle(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -104,24 +117,16 @@ namespace MVC2.Controllers
             return View(product);
         }
 
-        // POST: Products/Delete/5
+        // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Product product = db.Product.Find(id);
-            db.Product.Remove(product);
-            db.SaveChanges();
+            Product product = _productSvc.GetSingle(id);
+            _productSvc.Delete(product);
+            _productSvc.Save();
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }
