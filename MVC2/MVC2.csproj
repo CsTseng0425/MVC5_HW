@@ -201,6 +201,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\P1Controller.cs" />
+    <Compile Include="Controllers\ProductsVMController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -228,6 +229,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Products.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductVMService.cs" />
     <Compile Include="Models\ProductService.cs" />
     <Compile Include="Models\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\ViewModels\MyViewModel.cs" />
@@ -238,6 +240,7 @@
     <Compile Include="Repositories\IUnitOfWork.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\ProductsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Fabrics.mdf" />
@@ -331,6 +334,11 @@
     <Content Include="Views\Products\Details.cshtml" />
     <Content Include="Views\Products\Edit.cshtml" />
     <Content Include="Views\Products\Index.cshtml" />
+    <Content Include="Views\ProductsVM\Create.cshtml" />
+    <Content Include="Views\ProductsVM\Delete.cshtml" />
+    <Content Include="Views\ProductsVM\Details.cshtml" />
+    <Content Include="Views\ProductsVM\Edit.cshtml" />
+    <Content Include="Views\ProductsVM\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\ViewData\" />
